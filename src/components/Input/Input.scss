@@ -1,0 +1,20 @@
+@import "../../utils/_vars";
+
+.input {
+  width: 100%;
+
+  &__field {
+    @extend %field-style;
+    height: 25px;
+    border: none;
+    border-bottom: 1px solid #000;
+
+    &::placeholder {
+      @extend %placeholder;
+    }
+  }
+
+  &__error {
+    @extend %error-style;
+  }
+}

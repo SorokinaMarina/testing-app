@@ -10,8 +10,11 @@ import { TArrayQuestions, IValue, ICheckboxAnswer } from "@/utils/interface";
 import Checkbox from "../Checkbox/Checkbox";
 import Button from "../Button/Button";
 import ProgressBar from "../ProgressBar/ProgressBar";
+import { useRouter } from "next/navigation";
 
 export default function Questions() {
+  // Используем useRouter для перехода на страницу Result после окончания тестирования
+  const router = useRouter();
   // Переменная определяет какой тест будет отображаться
   const [indexElement, setIndexElement] = useState<number>(
     Number(localStorage.getItem("indexElement")) || 0,
@@ -33,7 +36,11 @@ export default function Questions() {
 
   // Функция, которая срабатывает при клике на кнопку "далее"
   function onClick() {
-    setIndexElement((prevValue) => prevValue + 1);
+    if (indexElement === questions.length - 1) {
+      router.push("/result");
+    } else {
+      setIndexElement((prevValue) => prevValue + 1);
+    }
   }
 
   // Функция, которая собирает данные с полей и сохраняет в переменную values

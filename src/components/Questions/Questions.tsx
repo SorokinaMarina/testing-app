@@ -6,51 +6,60 @@ import { questions } from "@/utils/constants";
 import Input from "../Input/Input";
 import TextArea from "../TextArea/TextArea";
 import Radio from "../Radio/Radio";
-import { TArrayQuestions, IValue, TValueArr } from "@/utils/interface";
+import { TArrayQuestions, IValue, ICheckboxAnswer } from "@/utils/interface";
 import Checkbox from "../Checkbox/Checkbox";
 import Button from "../Button/Button";
 
 export default function Questions() {
-  const [indexElement, setIndexElement] = useState<number>(0);
-  const [values, setValues] = useState<IValue | null>(null);
-  console.log(values);
+  // Переменная определяет какой тест будет отображаться
+  const [indexElement, setIndexElement] = useState<number>(
+    Number(localStorage.getItem("indexElement")) || 0,
+  );
+  // В эту переменную собираем значения всех полей для отправки на сервер
+  const [values, setValues] = useState<IValue | object>(
+    JSON.parse(localStorage.getItem("values") || "{}") as IValue,
+  );
 
-  //   useEffect((): void => {
-  //     if (localStorage.getItem("indexElement")) {
-  //       setIndexElement(Number(localStorage.getItem("indexElement")));
-  //     }
-  //   }, [indexElement]);
-
-  function onClick(): void {
-    setIndexElement((prevValue) => prevValue + 1);
+  // Сохраняем в локально хранилище значение переменной indexElement
+  useEffect((): void => {
     localStorage.setItem("indexElement", JSON.stringify(indexElement));
+  }, [indexElement]);
+
+  // Сохраняем в локальное хранилище значение переменной values
+  useEffect(() => {
+    localStorage.setItem("values", JSON.stringify(values));
+  }, [values]);
+
+  // Функция, которая срабатывает при клике на кнопку "далее"
+  function onClick() {
+    setIndexElement((prevValue) => prevValue + 1);
   }
 
+  // Функция, которая собирает данные с полей и сохраняет в переменную values
   function handleChange(
     e:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>,
   ): void {
-    const { name, value, type } = e.target;
+    const { name, value, type, id } = e.target;
 
     if (type === "checkbox") {
       if (e.target instanceof HTMLInputElement) {
         const checked = e.target.checked;
-        setValues((prevValues: IValue | null): IValue => {
-          if (!prevValues) {
-            return {};
-          }
+        setValues((prevValues: IValue): IValue => {
           if (checked) {
             return {
               ...prevValues,
-              [name]: [...((prevValues[name] as TValueArr[]) || []), value],
+              [name]: { ...(prevValues[name] as ICheckboxAnswer), [id]: value },
             };
           } else {
             return {
               ...prevValues,
-              [name]: ((prevValues[name] as TValueArr[]) || []).filter(
-                (item: TValueArr) => item !== value,
-              ),
+              [name]: {
+                ...Object.values(prevValues[name]).filter(
+                  (item) => item !== value,
+                ),
+              },
             };
           }
         });
@@ -75,9 +84,8 @@ export default function Questions() {
               handleChange={handleChange}
               name={questions[indexElement].name}
               values={
-                values !== null
-                  ? (values[questions[indexElement].name] as string)
-                  : ""
+                ((values as IValue)[questions[indexElement].name] as string) ||
+                ""
               }
             />
           )}
@@ -86,9 +94,8 @@ export default function Questions() {
               handleChange={handleChange}
               name={questions[indexElement].name}
               values={
-                values !== null
-                  ? (values[questions[indexElement].name] as string)
-                  : ""
+                ((values as IValue)[questions[indexElement].name] as string) ||
+                ""
               }
             />
           )}
@@ -99,24 +106,22 @@ export default function Questions() {
                 handleChange={handleChange}
                 name={questions[indexElement].name}
                 values={
-                  values !== null
-                    ? (values[questions[indexElement].name] as string)
-                    : ""
+                  ((values as IValue)[
+                    questions[indexElement].name
+                  ] as string) || ""
                 }
               />
             )}
           {questions[indexElement].type === "checkbox" &&
             questions[indexElement].answer.length !== 0 && (
               <Checkbox
-                questions={questions[indexElement].answer as TArrayQuestions[]}
+                questions={questions[indexElement].answer as ICheckboxAnswer}
                 handleChange={handleChange}
                 name={questions[indexElement].name}
                 values={
-                  values !== null
-                    ? (values[
-                        questions[indexElement].name
-                      ] as TArrayQuestions[])
-                    : []
+                  ((values as IValue)[
+                    questions[indexElement].name
+                  ] as ICheckboxAnswer) || undefined
                 }
               />
             )}

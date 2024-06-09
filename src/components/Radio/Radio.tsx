@@ -4,16 +4,32 @@ import RadioInput from "./RadioInput/RadioInput";
 
 interface IRadioProps {
   questions: TArrayQuestions[];
-  handleChange: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void,
-  name: string
-  values: string
+  handleChange: (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
+  ) => void;
+  name: string;
+  values: string;
 }
 
-export default function Radio({ questions, handleChange, name, values }: IRadioProps) {
+export default function Radio({
+  questions,
+  handleChange,
+  name,
+  values,
+}: IRadioProps) {
+  console.log(values);
   return (
     <div className="radio">
       {questions.map((item: string | number) => (
-        <RadioInput key={item} item={item} handleChange={handleChange} name={name} values={values} />
+        <RadioInput
+          key={item}
+          item={item}
+          handleChange={handleChange}
+          name={name}
+          values={values}
+        />
       ))}
     </div>
   );

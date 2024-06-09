@@ -15,9 +15,13 @@ export interface IInput extends IQuestionElement {
   answer: string;
 }
 
+export interface ICheckboxAnswer {
+  [key: string]: string | number;
+}
+
 export interface ICheckbox extends IQuestionElement {
-  answer: TArrayQuestions[];
-  rightAnswer: TArrayQuestions[];
+  answer: ICheckboxAnswer;
+  rightAnswer: ICheckboxAnswer;
 }
 
 export type TQuestions = IRadio | IInput | ICheckbox;
@@ -25,5 +29,5 @@ export type TQuestions = IRadio | IInput | ICheckbox;
 export type TValueArr = number | string;
 
 export interface IValue {
-  [key: string]: number | string | TValueArr[] | [];
+  [key: string]: number | string | TValueArr[] | [] | ICheckboxAnswer;
 }

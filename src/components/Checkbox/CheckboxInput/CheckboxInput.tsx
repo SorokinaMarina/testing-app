@@ -1,5 +1,5 @@
 import "./CheckboxInput.scss";
-import { TArrayQuestions } from "@/utils/interface";
+import { ICheckboxAnswer, TArrayQuestions } from "@/utils/interface";
 
 interface ICheckboxInputProps {
   item: TArrayQuestions;
@@ -9,7 +9,8 @@ interface ICheckboxInputProps {
       | React.ChangeEvent<HTMLTextAreaElement>,
   ) => void;
   name: string;
-  values: TArrayQuestions[] | [];
+  values: ICheckboxAnswer | undefined;
+  questions: ICheckboxAnswer;
 }
 
 export default function CheckboxInput({
@@ -17,21 +18,24 @@ export default function CheckboxInput({
   handleChange,
   name,
   values,
+  questions,
 }: ICheckboxInputProps) {
-  // console.log(values);
-  // const value = values.find((el) => el === item.toString());
-  // console.log(value);
   return (
-    <label className="checkbox-input" htmlFor={name}>
+    <label className="checkbox-input" htmlFor={String(item)}>
       <input
         className="checkbox-input__field"
         type="checkbox"
         name={name}
-        id={name}
-        value={item}
+        id={String(item)}
+        value={questions[item]}
         onChange={handleChange}
+        checked={
+          values
+            ? Object.values(values).some((el) => el === questions[item])
+            : false
+        }
       />
-      {item}
+      {questions[item]}
     </label>
   );
 }

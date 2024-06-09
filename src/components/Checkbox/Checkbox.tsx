@@ -1,16 +1,16 @@
 import "./Checkbox.scss";
-import { TArrayQuestions } from "@/utils/interface";
+import { ICheckboxAnswer } from "@/utils/interface";
 import CheckboxInput from "./CheckboxInput/CheckboxInput";
 
 interface ICheckbox {
-  questions: TArrayQuestions[];
+  questions: ICheckboxAnswer;
   handleChange: (
     e:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>,
   ) => void;
   name: string;
-  values: TArrayQuestions[] | [];
+  values: ICheckboxAnswer | undefined;
 }
 
 export default function Checkbox({
@@ -21,13 +21,14 @@ export default function Checkbox({
 }: ICheckbox) {
   return (
     <div className="checkbox">
-      {questions.map((item: string | number) => (
+      {Object.keys(questions).map((item: string | number) => (
         <CheckboxInput
           key={item}
           item={item}
           handleChange={handleChange}
           name={name}
           values={values}
+          questions={questions}
         />
       ))}
     </div>

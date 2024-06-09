@@ -1,5 +1,4 @@
 import "./Input.scss";
-import { IValue } from "@/utils/interface";
 
 interface IInputProps {
   handleChange: (

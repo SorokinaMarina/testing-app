@@ -9,6 +9,7 @@ import Radio from "../Radio/Radio";
 import { TArrayQuestions, IValue, ICheckboxAnswer } from "@/utils/interface";
 import Checkbox from "../Checkbox/Checkbox";
 import Button from "../Button/Button";
+import ProgressBar from "../ProgressBar/ProgressBar";
 
 export default function Questions() {
   // Переменная определяет какой тест будет отображаться
@@ -76,6 +77,7 @@ export default function Questions() {
 
   return (
     <section className="questions">
+      <ProgressBar totalSteps={questions.length} step={indexElement} />
       <form className="questions__form" action="#" id="questions-form">
         <h4 className="questions__title">{questions[indexElement].title}</h4>
         <fieldset className="questions__fieldset">

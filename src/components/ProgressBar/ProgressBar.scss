@@ -1,0 +1,32 @@
+.progress-bar {
+  display: flex;
+  width: 90%;
+  height: 12px;
+  border-radius: 20px;
+  margin: 10px auto 50px;
+  position: relative;
+
+  &_step {
+    height: 12px;
+    border-radius: 20px;
+  }
+
+  &_step.progress-bar_completed {
+    background: #787575;
+    margin-right: 25px; // Добавляем отступ только для завершенных шагов
+  }
+
+  &_step.progress-bar_active {
+    background: #da693f; // Цвет для активного шага
+    margin-right: 22px;
+  }
+
+  &_step.progress-bar_future {
+    background: #e0e0e0; // Цвет для еще не открытых шагов
+    margin-right: 25px; // Убираем отступ для будущих шагов
+  }
+
+  &_step:last-child {
+    margin-right: 0;
+  }
+}

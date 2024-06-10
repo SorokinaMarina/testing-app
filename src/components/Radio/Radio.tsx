@@ -19,7 +19,6 @@ export default function Radio({
   name,
   values,
 }: IRadioProps) {
-  console.log(values);
   return (
     <div className="radio">
       {questions.map((item: string | number) => (

@@ -10,4 +10,13 @@
   &:hover {
     opacity: 0.6;
   }
+
+  &[disabled] {
+    background-color: #b1b1b1;
+    cursor: default;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
 }

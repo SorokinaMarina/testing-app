@@ -4,7 +4,7 @@ import "../page.scss";
 
 export default function Home() {
   return (
-    <main className="main">
+    <main className="main main_display">
       <Title />
       <Questions />
     </main>

@@ -8,13 +8,10 @@
     height: 25px;
     border: none;
     border-bottom: 1px solid #000;
+    background-color: #f7f7f7;
 
     &::placeholder {
       @extend %placeholder;
     }
-  }
-
-  &__error {
-    @extend %error-style;
   }
 }

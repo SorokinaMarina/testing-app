@@ -3,12 +3,19 @@
   background-color: #f7f7f7;
   height: 100%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &_display {
+    display: block;
+  }
 
   &__title {
     margin: 0 auto;
     width: 60%;
     min-width: 300px;
-    padding-top: 150px;
     text-align: center;
     font-size: 20px;
   }

@@ -23,7 +23,6 @@ export default function Questions() {
   const [values, setValues] = useState<IValue | object>(
     JSON.parse(localStorage.getItem("values") || "{}") as IValue,
   );
-
   // Сохраняем в локально хранилище значение переменной indexElement
   useEffect((): void => {
     localStorage.setItem("indexElement", JSON.stringify(indexElement));
@@ -140,6 +139,13 @@ export default function Questions() {
         <Button
           onClick={onClick}
           text={indexElement === questions.length - 1 ? "Завершить" : "Далее"}
+          disabled={
+            (values as IValue)[questions[indexElement].name] === undefined ||
+            Object.values((values as IValue)[questions[indexElement].name])
+              .length === 0
+              ? true
+              : false
+          }
         />
       </div>
     </section>

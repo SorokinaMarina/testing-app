@@ -1,0 +1,12 @@
+.countdown {
+  border: 1px solid #d0d0d0;
+  background-color: #fff;
+  border-radius: 5px;
+  width: 65px;
+  display: flex;
+  justify-content: center;
+
+  &__timer {
+    padding: 5px 0;
+  }
+}

@@ -25,7 +25,6 @@ export default function TextArea({
         onChange={handleChange}
         value={values || ""}
       />
-      <span className="textarea__error">Ошибка</span>
     </label>
   );
 }

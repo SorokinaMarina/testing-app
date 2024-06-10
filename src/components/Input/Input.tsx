@@ -22,7 +22,6 @@ export default function Input({ handleChange, name, values }: IInputProps) {
         onChange={handleChange}
         value={values || ""}
       />
-      <span className="input__error">Ошибка</span>
     </label>
   );
 }

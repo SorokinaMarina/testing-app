@@ -10,7 +10,8 @@
     "lint:fix": "eslint --fix",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
     "prepare": "husky install",
-    "commit": "cz"
+    "commit": "cz",
+    "deploy": "gh-pages -d .next"
   },
   "lint-staged": {
     "*.{js, jsx,ts,tsx}": [
@@ -38,7 +39,8 @@
     "@rooks/use-window-size": "^4.11.2",
     "commitizen": "^4.3.0",
     "node-sass": "^9.0.0",
-    "sass": "^1.72.0"
+    "sass": "^1.72.0",
+    "gh-pages": "^6.1.1"
   },
   "devDependencies": {
     "typescript": "^5",

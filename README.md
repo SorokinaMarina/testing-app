@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Мини-приложение для тестирования
 
-## Getting Started
+### Реализована клиентская часть приложения для проведения тестирования. Тест предоставляет возможность выбирать один или несколько варинтов ответа, давать короткий или развёрнутый ответ. Тестирование имеет ограничение по времени. 
 
-First, run the development server:
+#### Реализовано:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+✔️ Сайт разработан по принципу SPA(Single Page Application);
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+✔️ Использованы семантические теги для SEO-оптимизации сайта;
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+✔️ Использование БЭМ-методологии для именования классов;
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+✔️ Реализована резиновая вёрстка при помощи процентных единиц измерения;
 
-## Learn More
+✔️ Реализована работа с формой, взаимодействие с неуправляемыми компонентами input типов - text, radio, checkbox и textarea;
 
-To learn more about Next.js, take a look at the following resources:
+✔️ Валидация кнопки "далее". Кнопка блокируется, если пользователь не заполнил обязательное поле или не выбрал вариант ответа;
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+✔️ Реализован таймер обратного отсчёта. Данные сохраняются в локальное хоранилище. При обновлении страницы таймер не сбрасывается;
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+✔️ Ответы пользователя сохраняются в единый объект, готовый для отправки на сервер. Данные объекта, так же, сохраняются в локальное хранилище. При обновлении страницы пользователю не придётся заново вводить свой ответ, поле будет заполненно данными из хранилища.
 
-## Deploy on Vercel
+✔️ Реализован Progress-bar.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Технологии
+* HTML
+* SCSS
+* TypeScript
+* React(Next.js)
+* Git
+* Webpack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Установка и запуск проекта локально
+* Клонировать репозиторий
+  
+  `git clone git@github.com:SorokinaMarina/testing-app.git`
+
+* Перейти в папку "testing-app"
+  
+  `cd testing-app`
+
+* Установить зависимости
+  
+  `npm i`
+
+* Запустить 
+  
+  `npm run dev`
+
+  

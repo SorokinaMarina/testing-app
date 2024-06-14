@@ -7,27 +7,32 @@ export default function CountDown() {
   // Используем useRouter для перехода на главную страницу
   const router = useRouter();
   // Переменная содержит общее количество секунд
-  const [countdown, setCountDown] = useState<number>(
-    Number(localStorage.getItem("timer")) || 300,
-  );
+  const [countdown, setCountDown] = useState<number | null>(null);
   const timerId = useRef<NodeJS.Timeout | null>(null);
 
-  // useEffect запускает таймер при рендере страницы
+  // useEffect получает значение таймера из локального хранилища
   useEffect(() => {
-    timerId.current = setInterval(() => {
-      setCountDown((prev) => prev - 1);
-    }, 1000);
-    return () => clearInterval(timerId.current!);
+    setCountDown(Number(localStorage.getItem("timer")) || 300);
   }, []);
 
-  // useEffect сохраняет в локальное хранилище значение таймера и очищает setInterval, если время закончилось
+  // запускаем/останавливаем таймер и сохраняем значение в локальное хранилище
   useEffect(() => {
+    if (countdown === null) return;
+    timerId.current = setInterval(() => {
+      setCountDown((prev) => {
+        if (prev === null) return null;
+        return prev - 1;
+      });
+    }, 1000);
+    localStorage.setItem("timer", JSON.stringify(countdown));
+
     if (countdown <= 0) {
       clearInterval(timerId.current!);
       router.push("/");
       localStorage.clear();
     }
-    localStorage.setItem("timer", JSON.stringify(countdown));
+
+    return () => clearInterval(timerId.current!);
   }, [countdown]);
 
   // Функция, которая высчитывает количество минут, секунд и возвращает строку со временем
@@ -40,6 +45,8 @@ export default function CountDown() {
 
     return minutes + ":" + seconds;
   }
+
+  if (countdown === null) return null;
 
   return (
     <div className="countdown">

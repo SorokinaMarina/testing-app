@@ -1,7 +1,7 @@
 "use client";
 
 import "./Questions.scss";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { questions } from "@/utils/constants";
 import Input from "../Input/Input";
 import TextArea from "../TextArea/TextArea";
@@ -16,21 +16,24 @@ export default function Questions() {
   // Используем useRouter для перехода на страницу Result после окончания тестирования
   const router = useRouter();
   // Переменная определяет какой тест будет отображаться
-  const [indexElement, setIndexElement] = useState<number>(
-    Number(localStorage.getItem("indexElement")) || 0,
-  );
+  const [indexElement, setIndexElement] = useState<number | null>(null);
   // В эту переменную собираем значения всех полей для отправки на сервер
-  const [values, setValues] = useState<IValue | object>(
-    JSON.parse(localStorage.getItem("values") || "{}") as IValue,
-  );
+  const [values, setValues] = useState<IValue | null>(null);
+
+  useEffect(() => {
+    setIndexElement(Number(localStorage.getItem("indexElement")) || 0);
+    setValues(JSON.parse(localStorage.getItem("values") || "{}") as IValue);
+  }, []);
+
   // Сохраняем в локально хранилище значение переменной indexElement
   useEffect((): void => {
-    localStorage.setItem("indexElement", JSON.stringify(indexElement));
+    indexElement &&
+      localStorage.setItem("indexElement", JSON.stringify(indexElement));
   }, [indexElement]);
 
   // Сохраняем в локальное хранилище значение переменной values
   useEffect(() => {
-    localStorage.setItem("values", JSON.stringify(values));
+    values && localStorage.setItem("values", JSON.stringify(values));
   }, [values]);
 
   // Функция, которая срабатывает при клике на кнопку "далее"
@@ -38,7 +41,10 @@ export default function Questions() {
     if (indexElement === questions.length - 1) {
       router.push("/result");
     } else {
-      setIndexElement((prevValue) => prevValue + 1);
+      setIndexElement((prevValue) => {
+        if (prevValue === null) return null;
+        return prevValue + 1;
+      });
     }
   }
 
@@ -53,7 +59,8 @@ export default function Questions() {
     if (type === "checkbox") {
       if (e.target instanceof HTMLInputElement) {
         const checked = e.target.checked;
-        setValues((prevValues: IValue): IValue => {
+        setValues((prevValues) => {
+          if (!prevValues) return null;
           if (checked) {
             return {
               ...prevValues,
@@ -80,6 +87,8 @@ export default function Questions() {
       );
     }
   }
+
+  if (indexElement === null) return null;
 
   return (
     <section className="questions">
@@ -140,7 +149,7 @@ export default function Questions() {
           onClick={onClick}
           text={indexElement === questions.length - 1 ? "Завершить" : "Далее"}
           disabled={
-            (values as IValue)[questions[indexElement].name] === undefined ||
+            (values && !values[questions[indexElement].name]) ||
             Object.values((values as IValue)[questions[indexElement].name])
               .length === 0
               ? true

@@ -16,13 +16,16 @@ export default function Questions() {
   // Используем useRouter для перехода на страницу Result после окончания тестирования
   const router = useRouter();
   // Переменная определяет какой тест будет отображаться
-  const [indexElement, setIndexElement] = useState<number>(
-    Number(localStorage.getItem("indexElement")) || 0,
-  );
+  const [indexElement, setIndexElement] = useState<number | null>(null);
   // В эту переменную собираем значения всех полей для отправки на сервер
-  const [values, setValues] = useState<IValue | object>(
-    JSON.parse(localStorage.getItem("values") || "{}") as IValue,
-  );
+  const [values, setValues] = useState<IValue | null>(null);
+
+  // При первом рендере получаем данные из локального хранилища для переменных indexElement и values
+  useEffect(() => {
+    setIndexElement(Number(localStorage.getItem("indexElement")) || 0);
+    setValues(JSON.parse(localStorage.getItem("values") || "{}") as IValue);
+  }, []);
+
   // Сохраняем в локально хранилище значение переменной indexElement
   useEffect((): void => {
     localStorage.setItem("indexElement", JSON.stringify(indexElement));
@@ -30,7 +33,7 @@ export default function Questions() {
 
   // Сохраняем в локальное хранилище значение переменной values
   useEffect(() => {
-    localStorage.setItem("values", JSON.stringify(values));
+    values && localStorage.setItem("values", JSON.stringify(values));
   }, [values]);
 
   // Функция, которая срабатывает при клике на кнопку "далее"
@@ -38,7 +41,10 @@ export default function Questions() {
     if (indexElement === questions.length - 1) {
       router.push("/result");
     } else {
-      setIndexElement((prevValue) => prevValue + 1);
+      setIndexElement((prevValue) => {
+        if (prevValue === null) return null;
+        return prevValue + 1;
+      });
     }
   }
 
@@ -53,7 +59,8 @@ export default function Questions() {
     if (type === "checkbox") {
       if (e.target instanceof HTMLInputElement) {
         const checked = e.target.checked;
-        setValues((prevValues: IValue): IValue => {
+        setValues((prevValues) => {
+          if (!prevValues) return null;
           if (checked) {
             return {
               ...prevValues,
@@ -83,31 +90,38 @@ export default function Questions() {
 
   return (
     <section className="questions">
-      <ProgressBar totalSteps={questions.length} step={indexElement} />
+      <ProgressBar totalSteps={questions.length} step={indexElement || 0} />
       <form className="questions__form" action="#" id="questions-form">
-        <h4 className="questions__title">{questions[indexElement].title}</h4>
+        <h4 className="questions__title">
+          {indexElement !== null && questions[indexElement].title}
+        </h4>
         <fieldset className="questions__fieldset">
-          {questions[indexElement].type === "input" && (
-            <Input
-              handleChange={handleChange}
-              name={questions[indexElement].name}
-              values={
-                ((values as IValue)[questions[indexElement].name] as string) ||
-                ""
-              }
-            />
-          )}
-          {questions[indexElement].type === "textarea" && (
-            <TextArea
-              handleChange={handleChange}
-              name={questions[indexElement].name}
-              values={
-                ((values as IValue)[questions[indexElement].name] as string) ||
-                ""
-              }
-            />
-          )}
-          {questions[indexElement].type === "radio" &&
+          {indexElement !== null &&
+            questions[indexElement].type === "input" && (
+              <Input
+                handleChange={handleChange}
+                name={questions[indexElement].name}
+                values={
+                  ((values as IValue)[
+                    questions[indexElement].name
+                  ] as string) || ""
+                }
+              />
+            )}
+          {indexElement !== null &&
+            questions[indexElement].type === "textarea" && (
+              <TextArea
+                handleChange={handleChange}
+                name={questions[indexElement].name}
+                values={
+                  ((values as IValue)[
+                    questions[indexElement].name
+                  ] as string) || ""
+                }
+              />
+            )}
+          {indexElement !== null &&
+            questions[indexElement].type === "radio" &&
             questions[indexElement].answer.length !== 0 && (
               <Radio
                 questions={questions[indexElement].answer as TArrayQuestions[]}
@@ -120,7 +134,8 @@ export default function Questions() {
                 }
               />
             )}
-          {questions[indexElement].type === "checkbox" &&
+          {indexElement !== null &&
+            questions[indexElement].type === "checkbox" &&
             questions[indexElement].answer.length !== 0 && (
               <Checkbox
                 questions={questions[indexElement].answer as ICheckboxAnswer}
@@ -140,9 +155,12 @@ export default function Questions() {
           onClick={onClick}
           text={indexElement === questions.length - 1 ? "Завершить" : "Далее"}
           disabled={
-            (values as IValue)[questions[indexElement].name] === undefined ||
-            Object.values((values as IValue)[questions[indexElement].name])
-              .length === 0
+            (indexElement !== null &&
+              values &&
+              !values[questions[indexElement].name]) ||
+            (indexElement !== null &&
+              Object.values((values as IValue)[questions[indexElement].name])
+                .length === 0)
               ? true
               : false
           }
